@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "business-data-pipelines"
+version = "0.1.0"
+description = "Unattended business data collection and database import pipelines."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "openpyxl>=3.1.0",
+  "pymysql>=1.1.0",
+  "PyYAML>=6.0.0",
+  "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.7.0",
+]
+
+[project.scripts]
+bdp = "business_data_pipelines.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100

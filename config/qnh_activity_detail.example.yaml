@@ -1,0 +1,7 @@
+qnh_activity_detail:
+  download_dir: downloads/qnh_activity_detail
+  wait_after_export_seconds: 180
+  poll_seconds: 60
+  max_polls_per_date: 12
+  final_polls: 20
+  request_timeout_seconds: 60
