@@ -9,7 +9,6 @@ ACTIVITY_DIMENSION = DimensionConfig(
     view_code="qnh_promotion_analysis_promotion_promotion",
     target_table="activity_detail",
     expected_task_prefix="导出活动明细",
-    et_env_name="QNH_ACTIVITY_ET",
     selected_data_codes=[
         "act_ord_cnt",
         "act_ord_pen_rate",
@@ -31,7 +30,6 @@ STORE_DIMENSION = DimensionConfig(
     view_code="qnh_promotion_analysis_promotion_store",
     target_table="activity_detail_store",
     expected_task_prefix="导出门店活动明细",
-    et_env_name="QNH_STORE_ET",
     selected_data_codes=[
         "act_ord_cnt",
         "act_ord_pen_rate",
@@ -51,4 +49,3 @@ DIMENSIONS = {
     ACTIVITY_DIMENSION.name: ACTIVITY_DIMENSION,
     STORE_DIMENSION.name: STORE_DIMENSION,
 }
-

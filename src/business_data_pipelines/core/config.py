@@ -55,15 +55,11 @@ class DatabaseSettings:
 @dataclass(frozen=True)
 class QnhSettings:
     mtgsig_service_url: str
-    activity_et: str
-    store_et: str
 
     @classmethod
     def from_env(cls) -> "QnhSettings":
         return cls(
             mtgsig_service_url=require_env("QNH_MTGSIG_SERVICE_URL"),
-            activity_et=require_env("QNH_ACTIVITY_ET"),
-            store_et=require_env("QNH_STORE_ET"),
         )
 
 

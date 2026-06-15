@@ -9,15 +9,18 @@ pip install -e ".[dev]"
 Copy-Item .env.example .env
 ```
 
-Fill `.env` with database credentials, QNH login states, and the signing-service URL.
+Fill `.env` with database credentials and the signing-service URL. Do not put `_et` in `.env`;
+the job reads the latest QNH cookie payload from `qnh_cookies_data`.
 
 ## Manual Backfill
 
+Run dimensions sequentially when both dimensions use the same QNH account:
+
 ```powershell
-.\scripts\run_qnh_activity_detail_parallel.ps1 -StartDate 2026-06-04 -EndDate 2026-06-09
+.\scripts\run_qnh_activity_detail_all.ps1 -StartDate 2026-06-04 -EndDate 2026-06-09
 ```
 
-Use individual scripts when only one dimension needs recovery:
+Use individual scripts only when one dimension needs recovery:
 
 ```powershell
 .\scripts\run_qnh_activity_detail_activity.ps1 -StartDate 2026-06-04 -EndDate 2026-06-09
@@ -28,8 +31,10 @@ Use individual scripts when only one dimension needs recovery:
 
 Create a Windows Task Scheduler task that runs after QNH has finished producing yesterday's data:
 
+Use the sequential wrapper:
+
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File scripts\run_qnh_activity_detail_parallel.ps1
+powershell.exe -ExecutionPolicy Bypass -File scripts\run_qnh_activity_detail_all.ps1
 ```
 
 The script writes logs to `logs/`, which is ignored by git.
@@ -40,7 +45,8 @@ The script writes logs to `logs/`, which is ignored by git.
   tasks are reused.
 - If import fails after download, re-run the same date. The target-table slice is replaced by
   `date` and `store_id`.
-- If the login state expires, update `.env` and re-run the failed date range.
+- If the login state expires, refresh the source account through the existing login automation so
+  `qnh_cookies_data` receives a fresh row, then re-run the failed date range.
 - If QNH rate-limits the account, increase `wait_after_export_seconds` or `poll_seconds` in config.
 
 ## Verification Queries

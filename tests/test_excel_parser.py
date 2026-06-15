@@ -6,6 +6,7 @@ from openpyxl import Workbook
 
 from business_data_pipelines.core.config import load_dotenv
 from business_data_pipelines.core.excel import read_two_row_header_sheet
+from business_data_pipelines.pipelines.qnh.activity_detail.cookie_repository import extract_et
 
 
 def test_read_two_row_header_sheet_prefers_second_header_row(tmp_path):
@@ -34,3 +35,9 @@ def test_load_dotenv_accepts_utf8_bom(tmp_path):
     load_dotenv(path)
 
     assert os.getenv("BDP_TEST_KEY") == "value"
+
+
+def test_extract_et_matches_xbot_cookie_format():
+    cookies = '{"_lxsdk_cuid":"abc","_et":"token-value","other":"x"}'
+
+    assert extract_et(cookies) == "token-value"

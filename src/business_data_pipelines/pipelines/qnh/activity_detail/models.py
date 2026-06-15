@@ -12,7 +12,6 @@ class DimensionConfig:
     view_code: str
     target_table: str
     expected_task_prefix: str
-    et_env_name: str
     selected_data_codes: list[str]
     has_store_column: bool
     has_active_store_count: bool

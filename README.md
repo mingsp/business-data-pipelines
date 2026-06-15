@@ -11,7 +11,7 @@ database, configuration, HTTP, and Excel helpers live under `core`.
 - `qnh.activity_detail`
   - Activity dimension: imports to `activity_detail`
   - Store dimension: imports to `activity_detail_store`
-  - Uses one login state per dimension so the two dimensions can run in parallel.
+  - Reads the latest QNH `_et` from `qnh_cookies_data`.
   - Runs one store at a time inside each account.
 
 ## Quick Start
@@ -34,10 +34,11 @@ When no date is provided, the command imports yesterday's data. This is the defa
 Windows Task Scheduler:
 
 ```powershell
-.\scripts\run_qnh_activity_detail_parallel.ps1
+.\scripts\run_qnh_activity_detail_all.ps1
 ```
 
 For unattended operation, use Windows Task Scheduler with the scripts in `scripts/`.
+When one shared QNH account is used, run dimensions sequentially.
 
 ## Documentation
 
@@ -47,5 +48,6 @@ For unattended operation, use Windows Task Scheduler with the scripts in `script
 
 ## Secrets
 
-Do not commit real `_et` values, database credentials, signing-service URLs, Excel exports,
-or logs. The repository contains only examples and code.
+Do not commit database credentials, signing-service URLs, Excel exports, logs, or copied cookie
+payloads. The repository contains only examples and code. QNH login state is read from the
+database at runtime.

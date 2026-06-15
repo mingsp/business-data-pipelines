@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import re
 import time
 from datetime import date, datetime, timedelta
@@ -11,6 +10,10 @@ from business_data_pipelines.core.config import RuntimeSettings
 from business_data_pipelines.core.db import mysql_connection
 from business_data_pipelines.pipelines.qnh.activity_detail.client import QnhClient
 from business_data_pipelines.pipelines.qnh.activity_detail.config import DIMENSIONS
+from business_data_pipelines.pipelines.qnh.activity_detail.cookie_repository import (
+    CookieRepository,
+    CookieSource,
+)
 from business_data_pipelines.pipelines.qnh.activity_detail.importer import ActivityDetailImporter
 from business_data_pipelines.pipelines.qnh.activity_detail.models import (
     DimensionConfig,
@@ -59,7 +62,7 @@ class ActivityDetailPipeline:
         self.final_polls = int(self.pipeline_config.get("final_polls", 20))
 
     def run(self) -> None:
-        et = self._dimension_et(self.dimension)
+        et = self._load_et()
         client = QnhClient(
             et=et,
             mtgsig_service_url=self.settings.qnh.mtgsig_service_url,
@@ -160,12 +163,20 @@ class ActivityDetailPipeline:
         )
         return self.download_dir / self.dimension.name / filename
 
-    @staticmethod
-    def _dimension_et(dimension: DimensionConfig) -> str:
-        value = os.getenv(dimension.et_env_name)
-        if not value:
-            raise RuntimeError(f"Missing login state for {dimension.name}: {dimension.et_env_name}")
-        return value
+    def _load_et(self) -> str:
+        cookie_config = self.pipeline_config.get("cookie_source", {})
+        source = CookieSource(
+            table=cookie_config.get("table", "qnh_cookies_data"),
+            platform=cookie_config.get("platform", "牵牛花"),
+            account=cookie_config.get("account", "xaypshuxin"),
+        )
+        with mysql_connection(self.settings.database) as connection:
+            et = CookieRepository(connection).latest_et(source)
+        print(
+            f"{self.dimension.name}: loaded login state from "
+            f"{source.table}/{source.platform}/{source.account}"
+        )
+        return et
 
 
 def run_activity_detail(settings: RuntimeSettings, dimension: str, start: str, end: str) -> None:
