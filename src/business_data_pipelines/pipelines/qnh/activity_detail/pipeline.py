@@ -164,7 +164,7 @@ class ActivityDetailPipeline:
         return self.download_dir / self.dimension.name / filename
 
     def _load_et(self) -> str:
-        cookie_config = self.pipeline_config.get("cookie_source", {})
+        cookie_config = self._cookie_config_for_dimension()
         source = CookieSource(
             table=cookie_config.get("table", "qnh_cookies_data"),
             platform=cookie_config.get("platform", "牵牛花"),
@@ -177,6 +177,12 @@ class ActivityDetailPipeline:
             f"{source.table}/{source.platform}/{source.account}"
         )
         return et
+
+    def _cookie_config_for_dimension(self) -> dict:
+        cookie_sources = self.pipeline_config.get("cookie_sources", {})
+        if self.dimension.name in cookie_sources:
+            return cookie_sources[self.dimension.name] or {}
+        return self.pipeline_config.get("cookie_source", {})
 
 
 def run_activity_detail(settings: RuntimeSettings, dimension: str, start: str, end: str) -> None:

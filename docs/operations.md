@@ -27,6 +27,13 @@ Use individual scripts only when one dimension needs recovery:
 .\scripts\run_qnh_activity_detail_store.ps1 -StartDate 2026-06-03 -EndDate 2026-06-09
 ```
 
+After `cookie_sources.activity.account` and `cookie_sources.store.account` point to two different
+valid QNH accounts, run both dimensions in parallel:
+
+```powershell
+.\scripts\run_qnh_activity_detail_parallel.ps1 -StartDate 2026-06-10 -EndDate 2026-06-14
+```
+
 ## Daily Scheduling
 
 Create a Windows Task Scheduler task that runs after QNH has finished producing yesterday's data:

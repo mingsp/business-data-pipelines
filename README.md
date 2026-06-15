@@ -11,7 +11,7 @@ database, configuration, HTTP, and Excel helpers live under `core`.
 - `qnh.activity_detail`
   - Activity dimension: imports to `activity_detail`
   - Store dimension: imports to `activity_detail_store`
-  - Reads the latest QNH `_et` from `qnh_cookies_data`.
+  - Reads the latest QNH `_et` from `qnh_cookies_data`, with one configurable cookie source per dimension.
   - Runs one store at a time inside each account.
 
 ## Quick Start
@@ -38,7 +38,8 @@ Windows Task Scheduler:
 ```
 
 For unattended operation, use Windows Task Scheduler with the scripts in `scripts/`.
-When one shared QNH account is used, run dimensions sequentially.
+Use `run_qnh_activity_detail_parallel.ps1` only after activity and store dimensions are configured
+with two different valid QNH cookie accounts.
 
 ## Documentation
 

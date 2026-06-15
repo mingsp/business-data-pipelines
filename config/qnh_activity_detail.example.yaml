@@ -1,8 +1,13 @@
 qnh_activity_detail:
-  cookie_source:
-    table: qnh_cookies_data
-    platform: 牵牛花
-    account: xaypshuxin
+  cookie_sources:
+    activity:
+      table: qnh_cookies_data
+      platform: 牵牛花
+      account: xaypshuxin
+    store:
+      table: qnh_cookies_data
+      platform: 牵牛花
+      account: xaypshuxin
   download_dir: downloads/qnh_activity_detail
   wait_after_export_seconds: 180
   poll_seconds: 60

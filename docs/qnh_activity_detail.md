@@ -10,9 +10,9 @@ This pipeline imports QNH activity detail history into existing database tables.
 | `store` | Latest `_et` from `qnh_cookies_data` | `activity_detail_store` | Sequential by store |
 
 The login-state lookup follows the existing XBot package: query the latest row from
-`qnh_cookies_data` where `platform = '牵牛花'` and `account = 'xaypshuxin'`, then extract `_et`
-from the `cookies` field. Because both dimensions use the same account by default, run the two
-dimensions sequentially unless a separate account strategy is explicitly configured later.
+`qnh_cookies_data` where `platform = '牵牛花'` and the configured `account` matches, then extract
+`_et` from the `cookies` field. The activity and store dimensions can use different configured
+accounts, which allows safe parallel execution.
 
 ## Flow
 
@@ -53,6 +53,12 @@ Sequential shared-account import:
 
 ```powershell
 .\scripts\run_qnh_activity_detail_all.ps1
+```
+
+Parallel two-account import:
+
+```powershell
+.\scripts\run_qnh_activity_detail_parallel.ps1
 ```
 
 ## Required Environment Variables
