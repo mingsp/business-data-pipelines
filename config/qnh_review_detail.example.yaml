@@ -1,0 +1,14 @@
+qnh_review_detail:
+  cookie_source:
+    table: qnh_cookies_data
+    platform: 牵牛花
+    account: xaypshuxin
+  download_dir: downloads/qnh_review_detail
+  target_table: store_comment_details
+  lookback_days: 30
+  request_timeout_seconds: 120
+  page_size: 10
+  export_match_order: true
+  is_valid: "1"
+  comment_level: BAD_COMMENT
+  reply_status_for_page:

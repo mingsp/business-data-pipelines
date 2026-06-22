@@ -181,3 +181,18 @@ class QnhClient:
             for chunk in response.iter_content(8192):
                 file.write(chunk)
 
+    def download_public_file(self, url: str, destination) -> None:
+        response = requests.get(
+            url,
+            headers={
+                "Referer": "https://qnh.meituan.com/",
+                "User-Agent": self.headers["User-Agent"],
+            },
+            stream=True,
+            timeout=180,
+        )
+        response.raise_for_status()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("wb") as file:
+            for chunk in response.iter_content(8192):
+                file.write(chunk)

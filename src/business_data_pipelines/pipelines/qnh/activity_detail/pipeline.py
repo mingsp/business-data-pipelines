@@ -16,7 +16,6 @@ from business_data_pipelines.pipelines.qnh.activity_detail.cookie_repository imp
 )
 from business_data_pipelines.pipelines.qnh.activity_detail.importer import ActivityDetailImporter
 from business_data_pipelines.pipelines.qnh.activity_detail.models import (
-    DimensionConfig,
     ExportStatus,
     ExportTask,
     Store,

@@ -13,6 +13,11 @@ database, configuration, HTTP, and Excel helpers live under `core`.
   - Store dimension: imports to `activity_detail_store`
   - Reads the latest QNH `_et` from `qnh_cookies_data`, with one configurable cookie source per dimension.
   - Runs one store at a time inside each account.
+- `qnh.review_detail`
+  - Exports QNH review details with the business defaults: latest 30 days, all stores, all channels,
+    normal bad order reviews, all reply statuses.
+  - Uses the "include similar order number" export mode.
+  - Imports to `store_comment_details`, creating the table when missing.
 
 ## Quick Start
 
@@ -28,6 +33,7 @@ Fill `.env`, then run:
 ```powershell
 bdp qnh activity-detail --dimension activity --start 2026-06-04 --end 2026-06-09 --config config/qnh_activity_detail.example.yaml
 bdp qnh activity-detail --dimension store --start 2026-06-03 --end 2026-06-09 --config config/qnh_activity_detail.example.yaml
+bdp qnh review-detail --config config/qnh_review_detail.example.yaml
 ```
 
 When no date is provided, the command imports yesterday's data. This is the default mode for
@@ -35,6 +41,7 @@ Windows Task Scheduler:
 
 ```powershell
 .\scripts\run_qnh_activity_detail_all.ps1
+.\scripts\run_qnh_review_detail.ps1
 ```
 
 For unattended operation, use Windows Task Scheduler with the scripts in `scripts/`.

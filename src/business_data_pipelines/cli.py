@@ -21,6 +21,11 @@ def build_parser() -> argparse.ArgumentParser:
     activity.add_argument("--end", help="End business date for backfill.")
     activity.add_argument("--config", required=True)
 
+    review = qnh_subparsers.add_parser("review-detail")
+    review.add_argument("--start", help="Start review date. Defaults to the platform default window.")
+    review.add_argument("--end", help="End review date. Defaults to the platform default window.")
+    review.add_argument("--config", required=True)
+
     return parser
 
 
@@ -48,6 +53,15 @@ def main() -> None:
         settings = RuntimeSettings.load(Path(args.config), env_path=Path(args.env))
         start, end = resolve_date_range(args, parser)
         run_activity_detail(settings, args.dimension, start, end)
+        return
+    if args.platform == "qnh" and args.pipeline == "review-detail":
+        from business_data_pipelines.core.config import RuntimeSettings
+        from business_data_pipelines.pipelines.qnh.review_detail.pipeline import run_review_detail
+
+        if bool(args.start) != bool(args.end):
+            parser.error("--start and --end must be used together.")
+        settings = RuntimeSettings.load(Path(args.config), env_path=Path(args.env))
+        run_review_detail(settings, start=args.start, end=args.end)
         return
     parser.error("Unsupported command")
 
